@@ -1,0 +1,3340 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bear & Bites</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                margin: 0;
+                min-height: 100vh;
+                background: #f3eadc;
+                color: #302925;
+                font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
+                display: flex;
+                justify-content: center;
+            }
+
+            .website {
+                width: 1200px;
+                max-width: 96vw;
+                margin: 25px auto 70px;
+                position: relative;
+            }
+
+            .title {
+                position: relative;
+                width: 100%;
+                height: 155px;
+                z-index: 100;
+                background: #fffdf8;
+                border: 4px solid #292522;
+                border-radius: 90px 90px 18px 18px;
+                box-shadow: 0 4px 0 #292522;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .logo {
+                position: relative;
+                z-index: 10;
+                text-align: center;
+                margin-top: -10px;
+            }
+
+            .logo h1 {
+                margin: 0;
+                font-family: Georgia, serif;
+                font-size: 53px;
+                font-style: italic;
+                font-weight: normal;
+                color: #6b5045;
+                transform: rotate(-2deg);
+            }
+
+            .logo p {
+                margin: 3px 0 0;
+                font-size: 9px;
+                letter-spacing: 3px;
+                color: #927c72;
+            }
+
+            .awning {
+                position: absolute;
+                left: -4px;
+                right: -4px;
+                bottom: -27px;
+                height: 48px;
+                background: url("https://craftic27.github.io/Bear-Bites-Assets/awning.png") center top / 100% 100% no-repeat;
+                z-index: 90;
+                pointer-events: none;
+            }
+
+            .navigation {
+                position: absolute;
+                left: 32px;
+                bottom: -62px;
+                display: flex;
+                gap: 10px;
+                z-index: 20;
+            }
+
+            .tab {
+                position: relative;
+                width: 68px;
+                height: 58px;
+                background: #fffdf8;
+                border: 3px solid #292522;
+                border-top: 0;
+                border-radius: 0 0 28px 28px;
+                color: #302925;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                font-size: 10px;
+                font-weight: bold;
+                padding: 5px 3px;
+                cursor: pointer;
+                box-shadow: 2px 2px 0 #292522;
+                z-index: 20;
+                transition: transform .2s ease, background .2s ease, height .2s ease;
+            }
+
+            .tab:nth-child(1) {
+                transform: rotate(-1deg);
+            }
+
+            .tab:nth-child(2) {
+                transform: rotate(.6deg);
+            }
+
+            .tab:nth-child(3) {
+                transform: rotate(-.8deg);
+            }
+
+            .tab:nth-child(4) {
+                transform: rotate(1deg);
+            }
+
+            .tab:hover {
+                background: #e5b7a4;
+                transform: translateY(4px) rotate(0deg);
+            }
+
+            .tab.active {
+                background: #e5b7a4;
+                height: 60px;
+                transform: translateY(4px) rotate(0deg);
+            }
+
+            .tab4 {
+                width: 120px;
+            }
+
+            .main-container {
+                position: relative;
+                width: 100%;
+                height: 1000px;
+                margin-top: 5px;
+                background: #fffdf8;
+                border: 5px solid #292522;
+                box-shadow: 10px 10px 0 #dfcdbd;
+                overflow: hidden;
+                z-index: 5;
+            }
+
+            .page-area {
+                position: absolute;
+                inset: 0;
+                overflow: hidden;
+                perspective: 1200px;
+            }
+
+            .page {
+                position: absolute;
+                left: 35px;
+                top: 35px;
+                width: calc(100% - 70px);
+                height: calc(100% - 70px);
+                padding: 38px;
+                background: #fffdf8;
+                border: 4px solid #292522;
+                border-radius: 6px;
+                box-shadow: 0 8px 18px rgba(60, 40, 30, .16);
+                overflow-y: auto;
+                transform-origin: center center;
+                transition: transform .65s cubic-bezier(.22, .75, .25, 1), opacity .5s ease, box-shadow .5s ease;
+                will-change: transform;
+                pointer-events: none;
+            }
+
+            .page.stack-1 {
+                transform: translate(18px, 18px) rotate(1.2deg) scale(.985);
+                opacity: .72;
+                z-index: 30;
+            }
+
+            .page.stack-2 {
+                transform: translate(10px, 10px) rotate(-.8deg) scale(.992);
+                opacity: .84;
+                z-index: 20;
+            }
+
+            .page.stack-3 {
+                transform: translate(5px, 5px) rotate(.5deg) scale(.997);
+                opacity: .93;
+                z-index: 10;
+            }
+
+            .page.active {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+                z-index: 50;
+                pointer-events: auto;
+                box-shadow: 0 12px 25px rgba(60, 40, 30, .20);
+            }
+
+            .page-heading {
+                display: inline-block;
+                padding: 8px 15px;
+                background: #fffdf8;
+                border: 4px solid #292522;
+                font-size: 22px;
+                font-weight: bold;
+                transform: rotate(-1deg);
+                margin-bottom: 30px;
+            }
+
+            .page-heading span {
+                color: #8d6251;
+            }
+
+            .home-card {
+                margin-top: 100px;
+                padding: 40px;
+                background: #f1ddd1;
+                border: 4px solid #292522;
+                text-align: center;
+                transform: rotate(-1deg);
+            }
+
+            .home-card h2 {
+                margin-top: 0;
+                font-family: Georgia, serif;
+                font-size: 38px;
+                font-style: italic;
+                color: #6b5045;
+            }
+
+            .home-card p {
+                line-height: 1.7;
+            }
+
+            .products-heading-image {
+                display:block;
+                width:clamp(130px, 24vw, 205px);
+                height:auto;
+                max-height:100px;
+                object-fit:contain;
+                object-position:left center;
+                margin:0 0 18px 0;
+            }
+
+            .products {
+                display:grid;
+                grid-template-columns:repeat(2,minmax(0,1fr));
+                gap:clamp(14px,3vw,32px);
+                align-items:start;
+            }
+
+            .product {
+                position:relative;
+                min-width:0;
+                padding:10px 10px 34px;
+                border:0;
+                border-radius:0;
+                background:transparent;
+                box-shadow:none;
+                cursor:pointer;
+                transition:transform .25s ease, opacity .25s ease;
+                -webkit-tap-highlight-color:transparent;
+            }
+
+            .product:hover,.product:focus-visible {
+                transform:translateY(-3px);
+                outline:none;
+            }
+
+            .product:focus-visible .product-card-art {
+                outline:3px solid #222;
+                outline-offset:4px;
+            }
+
+            .product-card-art {
+                position:relative;
+                display:block;
+                width:100%;
+                aspect-ratio:.92 / 1;
+                min-height:180px;
+                overflow:visible;
+                box-sizing:border-box;
+                border:4px solid #171717;
+                border-radius:34px 34px 26px 26px;
+                background:#fff;
+                box-shadow:inset 0 0 0 5px #fff, inset 0 0 0 9px #171717;
+            }
+
+            .product-photo {
+                position:absolute;
+                z-index:1;
+                top:20%;
+                left:14%;
+                display:block;
+                width:72%;
+                height:51%;
+                object-fit:contain;
+                object-position:center;
+                border-radius:0;
+                background:transparent;
+            }
+
+            .product-card-decoration {
+                position:absolute;
+                z-index:2;
+                top:-2%;
+                right:-2%;
+                width:31%;
+                height:35%;
+                object-fit:contain;
+                pointer-events:none;
+            }
+
+            .product-title-row {
+                position:absolute;
+                z-index:3;
+                left:14%;
+                right:-3%;
+                bottom:-10%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:0;
+                height:30%;
+                min-height:0;
+                padding:3px 4% 4px 13%;
+                overflow:visible;
+                border:0;
+                border-radius:0;
+                background:transparent;
+                box-shadow:none;
+            }
+
+            .product-title-row::before {
+                content:"";
+                position:absolute;
+                z-index:-1;
+                inset:2% -7% -7% -8%;
+                background:#171717;
+                clip-path:polygon(0 9%, 16% 20%, 35% 30%, 55% 31%, 72% 25%, 91% 0, 88% 29%, 100% 20%, 94% 49%, 83% 78%, 62% 100%, 38% 91%, 17% 72%, 0 62%, 7% 40%);
+            }
+
+            .product-title-row::after {
+                content:"";
+                position:absolute;
+                z-index:-1;
+                inset:5% -4% -1% -4%;
+                background:#fff;
+                clip-path:polygon(0 8%, 17% 20%, 35% 29%, 55% 30%, 72% 24%, 91% 0, 88% 29%, 100% 20%, 93% 49%, 82% 77%, 62% 97%, 39% 88%, 17% 69%, 0 59%, 7% 39%);
+            }
+
+            .product-title-bear {
+                position:absolute;
+                z-index:4;
+                left:-25%;
+                bottom:0;
+                display:block;
+                width:43%;
+                height:128%;
+                object-fit:contain;
+                flex:0 0 auto;
+            }
+
+            .product-name-art {
+                position:relative;
+                z-index:2;
+                display:block;
+                width:auto;
+                max-width:100%;
+                max-height:74%;
+                object-fit:contain;
+            }
+
+            .product-name-fallback {
+                display:block;
+                font-weight:800;
+                color:#171717;
+                font-size:clamp(15px,2.2vw,22px);
+                line-height:1.1;
+                text-align:center;
+            }
+
+            img.image-slot-empty {
+                display:none !important;
+            }
+
+            .product.has-name-art .product-name-fallback {
+                display:none;
+            }
+
+            .product-modal {
+                position:fixed;
+                inset:0;
+                z-index:10000;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                box-sizing:border-box;
+                padding:10px;
+                background:rgba(67,43,32,.24);
+                -webkit-backdrop-filter:blur(0);
+                backdrop-filter:blur(0);
+                opacity:0;
+                visibility:hidden;
+                pointer-events:none;
+                transition:opacity .3s ease, visibility .3s ease, backdrop-filter .3s ease;
+            }
+
+            .product-modal.is-open {
+                opacity:1;
+                visibility:visible;
+                pointer-events:auto;
+                -webkit-backdrop-filter:blur(7px);
+                backdrop-filter:blur(7px);
+            }
+
+            .product-modal-panel {
+                position:relative;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+                gap:clamp(8px,1.5vh,14px);
+                width:min(540px,94vw);
+                max-height:calc(100dvh - 20px);
+                overflow:hidden;
+                transform:translateY(12px) scale(.96);
+                transition:transform .38s cubic-bezier(.2,.8,.2,1);
+            }
+
+            .product-modal.is-open .product-modal-panel {
+                transform:translateY(0) scale(1);
+            }
+
+            .product-modal-close {
+                position:absolute;
+                top:2px;
+                right:2px;
+                z-index:5;
+                width:34px;
+                height:34px;
+                border:2px solid #9b4a2d;
+                border-radius:50%;
+                background:#fff8ed;
+                color:#9b4a2d;
+                font:inherit;
+                font-size:23px;
+                line-height:1;
+                cursor:pointer;
+            }
+
+            .product-bear-frame {
+                position:relative;
+                display:grid;
+                place-items:center;
+                width:min(68vw,340px);
+                max-height:54dvh;
+                aspect-ratio:1/1;
+                flex:0 1 auto;
+            }
+
+            .product-bear-background {
+                position:absolute;
+                inset:0;
+                width:100%;
+                height:100%;
+                object-fit:contain;
+            }
+
+            .product-modal-photo {
+                position:relative;
+                z-index:1;
+                top:7%;
+                width:59%;
+                height:59%;
+                object-fit:contain;
+                border:4px solid #fffdf7;
+                border-radius:22px;
+                background:#fffdf7;
+                box-shadow:0 3px 0 #b85b38;
+            }
+
+            .product-modal-description {
+                box-sizing:border-box;
+                width:min(100%,470px);
+                max-height:27dvh;
+                overflow:auto;
+                padding:12px 15px;
+                border:3px solid #d76c53;
+                border-radius:14px;
+                background:#fff0dc;
+                color:#96503b;
+                font-family:inherit;
+                font-size:clamp(12px,2.0vw,15px);
+                font-weight:600;
+                line-height:1.4;
+                text-align:left;
+                box-shadow:0 5px 0 rgba(184,91,56,.14);
+                opacity:0;
+                transform:translateY(8px);
+                transition:opacity .28s ease .08s, transform .32s ease .08s;
+            }
+
+            .product-modal.is-open .product-modal-description {
+                opacity:1;
+                transform:translateY(0);
+            }
+
+            @media (max-height:680px) {
+                .product-bear-frame {
+                    width:min(48vh,270px);
+                    max-height:48dvh;
+                }
+
+                .product-modal-description {
+                    max-height:25dvh;
+                    padding:8px 11px;
+                    font-size:12px;
+                }
+            }
+
+            @media (max-width:750px) {
+                .products {
+                    grid-template-columns:repeat(2,minmax(0,1fr));
+                    gap:8px;
+                }
+
+                .product {
+                    padding:5px;
+                }
+
+                .product-card-art {
+                    border-radius:18px;
+                }
+
+                .product-photo {
+                    width:64%;
+                    height:64%;
+                }
+
+                .product-title-row {
+                    min-height:24%;
+                    gap:3px;
+                    padding:2px 2px 2px 12%;
+                }
+
+                .product-title-bear {
+                    width:29%;
+                    height:115%;
+                }
+
+                .product-name-art {
+                    max-width:100%;
+                    max-height:80%;
+                }
+
+                .product-name-fallback {
+                    font-size:clamp(11px,2.8vw,16px);
+                }
+
+                .product-bear-frame {
+                    width:min(76vw,300px);
+                    max-height:48dvh;
+                }
+
+                .product-modal-panel {
+                    width:min(440px,96vw);
+                }
+
+                .product-modal-description {
+                    max-height:29dvh;
+                }
+            }
+
+            @media (prefers-reduced-motion:reduce) {
+                .product,.product-modal,.product-modal-panel,.product-modal-description {
+                    transition-duration:.01ms !important;
+                }
+            }
+
+            .about-card {
+                margin-top: 70px;
+                padding: 35px;
+                background: #e5eddc;
+                border: 4px solid #292522;
+                line-height: 1.8;
+                transform: rotate(.6deg);
+            }
+
+            .intro-screen {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f3eadc;
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transition: opacity .75s cubic-bezier(.22, .75, .25, 1), visibility 0s linear .75s;
+            }
+
+            .intro-screen.is-finished {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            .intro-media {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+                user-select: none;
+            }
+
+            body.intro-active .main-container {
+                transform: translateY(28px);
+                opacity: 0;
+            }
+
+            body.intro-active .page {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            body.intro-active .title {
+                opacity: 0;
+            }
+
+            body.intro-active .navigation {
+                opacity: 0;
+            }
+
+            body.page-intro .main-container {
+                animation: mainContainerIn .7s cubic-bezier(.22, .75, .25, 1) .5s both;
+            }
+
+            @keyframes mainContainerIn {
+                from {
+                    transform: translateY(28px);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            body.page-intro .page[data-index="3"] {
+                animation: pageFromLeft .55s cubic-bezier(.22, .75, .25, 1) 1.5s both;
+            }
+
+            body.page-intro .page[data-index="2"] {
+                animation: pageFromRight .55s cubic-bezier(.22, .75, .25, 1) 1.7s both;
+            }
+
+            body.page-intro .page[data-index="1"] {
+                animation: pageFromLeft .55s cubic-bezier(.22, .75, .25, 1) 1.9s both;
+            }
+
+            body.page-intro .page[data-index="0"] {
+                animation: pageFromRight .55s cubic-bezier(.22, .75, .25, 1) 2.1s both;
+            }
+
+            @keyframes pageFromLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-28px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: var(--page-final-transform);
+                }
+            }
+
+            @keyframes pageFromRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(28px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: var(--page-final-transform);
+                }
+            }
+
+            .page[data-index="0"] {
+                --page-final-transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+
+            .page[data-index="1"] {
+                --page-final-transform: translate(18px, 18px) rotate(1.2deg) scale(.985);
+            }
+
+            .page[data-index="2"] {
+                --page-final-transform: translate(10px, 10px) rotate(-.8deg) scale(.992);
+            }
+
+            .page[data-index="3"] {
+                --page-final-transform: translate(5px, 5px) rotate(.5deg) scale(.997);
+            }
+
+            body.page-intro .title {
+                animation: headerIn .6s cubic-bezier(.22, .75, .25, 1) 2.75s both;
+            }
+
+            @keyframes headerIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-24px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            body.page-intro .navigation {
+                animation: navigationIn .55s cubic-bezier(.22, .75, .25, 1) 3.45s both;
+            }
+
+            @keyframes navigationIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-18px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .music-toggle {
+                position: fixed;
+                top: 18px;
+                right: 18px;
+                width: 44px;
+                height: 44px;
+                padding: 0;
+                border: 3px solid #292522;
+                border-radius: 50%;
+                background: #fffdf8;
+                color: #302925;
+                box-shadow: 3px 3px 0 #292522;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                line-height: 1;
+                cursor: pointer;
+                z-index: 10000;
+                transition: transform .2s ease, background .2s ease;
+            }
+
+            .music-toggle:hover {
+                background: #e5b7a4;
+                transform: translateY(2px);
+            }
+
+            .music-toggle:active {
+                transform: translateY(3px);
+            }
+
+            .music-toggle.sound-switch {
+                position:relative;
+                flex:0 0 68px;
+                width:68px;
+                height:36px;
+                padding:0;
+                border:2px solid #292522;
+                border-radius:999px;
+                background:#c7d9b9;
+                box-shadow:2px 2px 0 #292522;
+                display:block;
+                overflow:hidden;
+                cursor:pointer;
+                line-height:1;
+                transition:background .3s ease, transform .2s ease;
+            }
+
+            .music-toggle.sound-switch.is-muted {
+                background:#e5b7a4;
+            }
+
+            .sound-knob {
+                position:absolute;
+                top:2px;
+                left:2px;
+                width:26px;
+                height:26px;
+                border:2px solid #292522;
+                border-radius:50%;
+                background:#fffdf8;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                box-shadow:0 1px 2px #0002;
+                transform:translateX(30px);
+                transition:transform .35s cubic-bezier(.2,.8,.2,1), background .25s ease;
+            }
+
+            .music-toggle.sound-switch.is-muted .sound-knob {
+                transform:translateX(0);
+            }
+
+            .sound-knob img {
+                width:16px;
+                height:16px;
+                display:block;
+                object-fit:contain;
+                pointer-events:none;
+            }
+
+            .music-toggle.sound-switch:active .sound-knob {
+                scale:.88;
+            }
+
+            .music-toggle.sound-switch:focus-visible {
+                outline:3px solid #8d6251;
+                outline-offset:3px;
+            }
+
+            @media (max-width:750px) {
+                .music-toggle.sound-switch {
+                    width:62px;
+                    flex-basis:62px;
+                    height:34px;
+                }
+
+                .sound-knob {
+                    top:2px;
+                    left:2px;
+                    width:24px;
+                    height:24px;
+                    transform:translateX(28px);
+                }
+
+                .music-toggle.sound-switch.is-muted .sound-knob {
+                    transform:translateX(0);
+                }
+
+                .sound-knob img {
+                    width:15px;
+                    height:15px;
+                }
+            }
+
+            .now-playing {
+                position: fixed;
+                top: 0;
+                left: 50%;
+                transform: translate(-50%, -110%);
+                width: 330px;
+                padding: 16px 22px;
+                background: #fffdf8;
+                border: 4px solid #292522;
+                border-top: 0;
+                border-radius: 0 0 18px 18px;
+                box-shadow: 4px 5px 0 #292522;
+                text-align: center;
+                z-index: 9998;
+                transition: transform .65s cubic-bezier(.22, .75, .25, 1);
+                pointer-events: none;
+            }
+
+            .now-playing.show {
+                transform: translate(-50%, 0);
+            }
+
+            .now-playing-label {
+                font-size: 9px;
+                letter-spacing: 3px;
+                color: #927c72;
+                margin-bottom: 5px;
+            }
+
+            .now-playing-title {
+                font-family: Georgia, serif;
+                font-size: 22px;
+                font-style: italic;
+                font-weight: bold;
+                color: #6b5045;
+            }
+
+            .now-playing-artist {
+                margin-top: 3px;
+                font-size: 12px;
+                color: #302925;
+            }
+
+            .website {
+                margin-top: 22px;
+            }
+
+            .title {
+                border-radius: 110px 110px 10px 10px;
+            }
+
+            .logo h1 {
+                font-size: clamp(30px, 5vw, 53px);
+            }
+
+            .navigation {
+                left: 28px;
+                bottom: -66px;
+                gap: 8px;
+            }
+
+            .tab {
+                flex-direction: column;
+                gap: 2px;
+                height: 62px;
+            }
+
+            .tab img {
+                width: 25px;
+                height: 25px;
+                object-fit: contain;
+            }
+
+            .tab span {
+                font-size: 8px;
+                line-height: 1;
+            }
+
+            .tab.active {
+                height: 66px;
+            }
+
+            .tab4 {
+                width: 76px;
+            }
+
+            .main-container {
+                margin-top: 8px;
+            }
+
+            .home-page {
+                padding: clamp(24px, 3vw, 38px) clamp(24px, 3vw, 42px) 38px;
+            }
+
+            .poster-slot {
+                display: block;
+                box-sizing: border-box;
+                width: min(100%, 230px);
+                height: auto;
+                margin: 0 auto 25px;
+                padding: 5px;
+                border: 3px solid #b97861;
+                border-radius: 12px;
+                background: #fff3ed;
+                position: relative;
+                overflow: hidden;
+                cursor: zoom-in;
+                box-shadow: 0 3px 0 rgba(107,80,69,.16);
+                transition: transform .2s ease, box-shadow .2s ease;
+            }
+
+            .poster-slot:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(107,80,69,.16);
+            }
+
+            .poster-slot img {
+                display:block;
+                width:100%;
+                height:auto;
+                max-width:100%;
+                object-fit:contain;
+                border-radius:7px;
+            }
+
+            .poster-lightbox {
+                position:fixed;
+                inset:0;
+                z-index:20000;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:22px;
+                background:rgba(35,24,20,.78);
+                cursor:zoom-out;
+                opacity:0;
+                visibility:hidden;
+                pointer-events:none;
+                transition:opacity .25s ease, visibility .25s ease;
+            }
+
+            .poster-lightbox.is-open {
+                opacity:1;
+                visibility:visible;
+                pointer-events:auto;
+            }
+
+            .poster-lightbox img {
+                display:block;
+                max-width:min(92vw, 900px);
+                max-height:90vh;
+                width:auto;
+                height:auto;
+                object-fit:contain;
+                border:4px solid #fff3ed;
+                border-radius:14px;
+                box-shadow:0 18px 55px rgba(0,0,0,.35);
+                transform:scale(.88);
+                transition:transform .28s cubic-bezier(.2,.75,.25,1);
+            }
+
+            .poster-lightbox.is-open img {
+                transform:scale(1);
+            }
+
+            .poster-lightbox:focus-visible {
+                outline:3px solid #fff;
+                outline-offset:-8px;
+            }
+
+            @media (max-width:750px) {
+                .poster-slot {
+                    width:min(58vw, 190px);
+                    height:auto;
+                }
+
+                .poster-lightbox {
+                    padding:12px;
+                }
+
+                .poster-lightbox img {
+                    max-width:96vw;
+                    max-height:88vh;
+                }
+            }
+
+            .home-feature {
+                position:relative;
+                width:100%;
+                margin:0 auto 24px;
+                overflow:hidden;
+                border:3px solid #292522;
+                border-radius:24px;
+                background:#f4e8dc;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+
+            .cookie-feature {
+                height:auto;
+                min-height:300px;
+                border:0;
+                border-radius:0;
+                background:transparent;
+                overflow:visible;
+                display:grid;
+                grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+                gap:26px;
+                align-items:start;
+                justify-content:stretch;
+                margin-bottom:28px;
+            }
+
+            .cookie-art {
+                min-width:0;
+                width:100%;
+                align-self:center;
+                justify-self:center;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+
+            .cookie-feature img {
+                display:block;
+                width:100%;
+                height:auto;
+                max-width:100%;
+                max-height:none;
+                object-fit:contain;
+            }
+
+            .cookie-copy {
+                min-width:0;
+                align-self:start;
+                padding:8px 8px 14px;
+                text-align:left;
+                color:#302925;
+                display:flex;
+                flex-direction:column;
+                justify-content:flex-start;
+                line-height:1.4;
+            }
+
+            .cookie-copy h2 {
+                margin:0 0 16px;
+                font-family:"Fredoka", "Comic Sans MS", sans-serif;
+                font-size:clamp(24px, 2.7vw, 32px);
+                font-weight:600;
+                color:#a84a32;
+                letter-spacing:.2px;
+            }
+
+            .cookie-copy p {
+                margin:0 0 8px;
+                font-family:"Fredoka", "Trebuchet MS", sans-serif;
+                font-size:clamp(15px, 1.65vw, 19px);
+                font-weight:500;
+                line-height:1.4;
+                color:#9b5b49;
+                overflow-wrap:break-word;
+            }
+
+            .bakery-feature {
+                height:180px;
+                border-radius:4px;
+            }
+
+            .bakery-feature img {
+                width:100%;
+                height:100%;
+                object-fit:cover;
+            }
+
+            .asset-fallback {
+                padding:18px;
+                text-align:center;
+                color:#8d6251;
+                font-size:14px;
+            }
+
+            .asset-fallback small {
+                font-size:11px;
+                opacity:.75;
+            }
+
+            .home-feature:has(img:not([style*="display: none"])) .asset-fallback {
+                display:none;
+            }
+
+            .console-section {
+                position:relative;
+                width:min(100%, 520px);
+                margin:0 auto 10px;
+            }
+
+            .console-toggle {
+                position:relative;
+                display:block;
+                width:100%;
+                padding:0;
+                border:0;
+                background:transparent;
+                cursor:pointer;
+                line-height:0;
+                transition:filter .2s ease;
+                z-index:2;
+            }
+
+            .console-toggle:hover {
+                filter:brightness(1.025);
+            }
+
+            .console-toggle img {
+                display:block;
+                width:100%;
+                height:auto;
+            }
+
+            .console-game {
+                position:absolute;
+                z-index:3;
+                left:24.9%;
+                top:14.2%;
+                width:50.7%;
+                height:30.9%;
+                overflow:hidden;
+                background:#fff8e8;
+                border:0;
+                border-radius:1px;
+            }
+
+            .console-score {
+                position:absolute;
+                z-index:4;
+                left:30.1%;
+                top:56.1%;
+                width:40.1%;
+                height:30.7%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:5px;
+                color:#713d3b;
+                background:rgba(255,248,232,.94);
+                border:1px solid #d6a5a0;
+                border-radius:3px;
+                font:700 clamp(10px, 2.5vw, 18px)/1.2 "Trebuchet MS", sans-serif;
+                text-align:center;
+                pointer-events:none;
+            }
+
+            .console-score[hidden], .console-game[hidden] {
+                display:none;
+            }
+
+            .utility-toggles {
+                position:absolute;
+                top:12px;
+                right:12px;
+                z-index:200;
+                display:flex;
+                gap:8px;
+            }
+
+            .music-toggle {
+                position:static;
+                flex:0 0 40px;
+                width:40px;
+                height:40px;
+            }
+
+            .main-container {
+                position:relative;
+            }
+
+            body.page-intro .poster-slot, body.page-intro .home-feature, body.page-intro .console-toggle {
+                animation: homeElementsIn .65s cubic-bezier(.22,.75,.25,1) 2.15s both;
+            }
+
+            body.intro-active .poster-slot, body.intro-active .home-feature, body.intro-active .console-toggle, body.intro-active .utility-toggles {
+                opacity:0;
+            }
+
+            body.page-intro .utility-toggles {
+                animation: headerIn .6s cubic-bezier(.22,.75,.25,1) 2.9s both;
+            }
+
+            @keyframes homeElementsIn {
+                from {
+                    opacity:0;
+                    transform:translateY(24px) scale(.98);
+                }
+
+                to {
+                    opacity:1;
+                    transform:translateY(0) scale(1);
+                }
+            }
+
+            @media (max-width: 750px) {
+                .website {
+                    max-width: 96vw;
+                }
+
+                .title {
+                    height: 125px;
+                }
+
+                .logo h1 {
+                    font-size: 34px;
+                }
+
+                .title::before, .title::after {
+                    display: none;
+                }
+
+                .navigation {
+                    left: 15px;
+                    bottom: -57px;
+                    gap: 5px;
+                }
+
+                .tab {
+                    width: 58px;
+                    font-size: 9px;
+                }
+
+                .main-container {
+                    height: 780px;
+                }
+
+                .page {
+                    left: 20px;
+                    top: 25px;
+                    width: calc(100% - 40px);
+                    height: calc(100% - 50px);
+                    padding: 25px;
+                }
+
+                .products {
+                    grid-template-columns: 1fr;
+                }
+
+                .product.expanded .product-name {
+                    top: 216px;
+                }
+
+                .product-description {
+                    top: 270px;
+                    font-size: 12px;
+                }
+
+                .music-toggle {
+                    top: 12px;
+                    right: 12px;
+                    width: 40px;
+                    height: 40px;
+                    font-size: 16px;
+                }
+
+                .now-playing {
+                    width: 270px;
+                    padding: 13px 16px;
+                }
+
+                .now-playing-title {
+                    font-size: 18px;
+                }
+
+                .utility-toggles {
+                    top: 10px;
+                    right: 10px;
+                    gap: 6px;
+                }
+
+                .music-toggle {
+                    width: 38px;
+                    height: 38px;
+                    flex-basis: 38px;
+                }
+
+                .utility-toggles {
+                    top:8px;
+                    right:8px;
+                    gap:6px;
+                }
+
+                .home-page {
+                    padding: 20px 14px 28px;
+                }
+
+                .poster-slot {
+                    width: min(58vw, 190px);
+                    height: auto;
+                }
+
+                .cookie-feature {
+                    height:auto;
+                    min-height:0;
+                    grid-template-columns:minmax(0, .9fr) minmax(0, 1.1fr);
+                    gap:10px;
+                    align-items:start;
+                }
+
+                .cookie-art {
+                    min-height:0;
+                    align-self:center;
+                    justify-self:center;
+                }
+
+                .cookie-feature img {
+                    width:100%;
+                    height:auto;
+                }
+
+                .cookie-copy {
+                    padding:4px 2px 12px;
+                }
+
+                .cookie-copy h2 {
+                    font-size:21px;
+                    margin-bottom:10px;
+                }
+
+                .cookie-copy p {
+                    font-size:clamp(13px, 2.9vw, 16px);
+                    line-height:1.38;
+                    margin-bottom:7px;
+                }
+
+                .bakery-feature {
+                    height: 130px;
+                }
+
+                .console-section {
+                    width: 100%;
+                }
+
+                .console-game {
+                    left:24.9%;
+                    top:14.2%;
+                    width:50.7%;
+                    height:30.9%;
+                }
+
+                .console-score {
+                    left:30.1%;
+                    top:56.1%;
+                    width:40.1%;
+                    height:30.7%;
+                }
+
+                .tab img {
+                    width: 21px;
+                    height: 21px;
+                }
+
+                .tab span {
+                    font-size: 7px;
+                }
+            }
+
+            .website {
+                width:900px;
+                max-width:96vw;
+            }
+
+            .title.storefront-header {
+                display:block;
+                width:100%;
+                height:auto !important;
+                min-height:0;
+                padding:0;
+                margin:0;
+                border:0;
+                border-radius:0;
+                box-shadow:none;
+                background:transparent;
+                position:relative;
+                line-height:0;
+                z-index:100;
+            }
+
+            .storefront-image {
+                display:block;
+                width:100%;
+                height:auto;
+                margin:0;
+                border:0;
+            }
+
+            .title.storefront-header .navigation {
+                left:6%;
+                bottom:-31px;
+                gap:10px;
+                align-items:flex-start;
+            }
+
+            .title.storefront-header .tab {
+                width:64px;
+                height:86px;
+                flex:0 0 64px;
+                padding:8px 4px 15px;
+                gap:5px;
+                border:0;
+                border-radius:0;
+                box-shadow:none;
+                background:transparent;
+                position:relative;
+                isolation:isolate;
+                overflow:visible;
+                clip-path:polygon(0 0,100% 0,100% 84%,50% 100%,0 84%);
+                transform:none;
+                transition:transform .2s ease, filter .2s ease;
+            }
+
+            .title.storefront-header .tab::before {
+                content:"";
+                position:absolute;
+                inset:0;
+                z-index:-2;
+                background:#292522;
+                clip-path:polygon(0 0,100% 0,100% 84%,50% 100%,0 84%);
+            }
+
+            .title.storefront-header .tab::after {
+                content:"";
+                position:absolute;
+                inset:3px 3px 5px;
+                z-index:-1;
+                background:#fffdf8;
+                clip-path:polygon(0 0,100% 0,100% 82%,50% 98%,0 82%);
+            }
+
+            .title.storefront-header .tab img {
+                width:60px;
+                height:60px;
+                object-fit:contain;
+            }
+
+            .title.storefront-header .tab.home img {
+                width:40px;
+                height:40px;
+                object-fit:contain;
+            }
+
+            .title.storefront-header .tab span {
+                color:#302925;
+                font-size:8px;
+                line-height:1.1;
+            }
+
+            .title.storefront-header .tab:nth-child(1) {
+                transform:rotate(-1deg);
+            }
+
+            .title.storefront-header .tab:nth-child(2) {
+                transform:rotate(.6deg);
+            }
+
+            .title.storefront-header .tab:nth-child(3) {
+                transform:rotate(-.5deg);
+            }
+
+            .title.storefront-header .tab:nth-child(4) {
+                transform:rotate(1deg);
+            }
+
+            .title.storefront-header .tab:hover {
+                transform:translateY(4px);
+                filter:brightness(.98);
+                background:transparent;
+            }
+
+            .title.storefront-header .tab.active {
+                height:90px;
+                transform:translateY(3px);
+            }
+
+            .title.storefront-header .tab.active::after {
+                background:#e5b7a4;
+            }
+
+            .title.storefront-header .tab4 {
+                width:64px;
+            }
+
+            .main-container {
+                margin-top:8px;
+            }
+
+            @media (max-width:750px) {
+                .title.storefront-header {
+                    height:auto !important;
+                }
+
+                .title.storefront-header .navigation {
+                    left:4%;
+                    bottom:-25px;
+                    gap:5px;
+                }
+
+                .title.storefront-header .tab {
+                    width:53px;
+                    height:73px;
+                    flex-basis:53px;
+                    padding:6px 3px 12px;
+                }
+
+                .title.storefront-header .tab img {
+                    width:22px;
+                    height:22px;
+                }
+
+                .title.storefront-header .tab span {
+                    font-size:7px;
+                }
+
+                .title.storefront-header .tab.active {
+                    height:76px;
+                }
+
+                .main-container {
+                    margin-top:8px;
+                }
+            }
+
+            .website {
+                width: 900px;
+                max-width: 96vw;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .title.storefront-header {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: auto !important;
+                min-height: 0;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+                background: transparent;
+                line-height: 0;
+                overflow: visible;
+                z-index: 100;
+            }
+
+            .title.storefront-header .storefront-image {
+                display: block;
+                position: relative;
+                z-index: 2;
+                width: 110%;
+                max-width: none;
+                height: auto;
+                margin: 0 0 -4% -4.5%;
+                border: 0;
+            }
+
+            .title.storefront-header .navigation {
+                position: absolute;
+                left: 6%;
+                bottom: -60px;
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+                z-index: 1;
+            }
+
+            .title.storefront-header .tab {
+                z-index: 1;
+            }
+
+            .main-container {
+                margin-top: 0 !important;
+                position: relative;
+                z-index: 5;
+            }
+
+            @media (max-width: 750px) {
+                .website {
+                    max-width: 96vw;
+                }
+
+                .title.storefront-header .navigation {
+                    left: 4%;
+                    bottom: -48px;
+                    gap: 5px;
+                }
+
+                .main-container {
+                    margin-top: 0 !important;
+                }
+            }
+
+
+            #consoleGame, #consoleGame * {
+                box-sizing: border-box;
+            }
+
+            #consoleGame {
+                position:absolute;
+                left:24.9%;
+                top:14.2%;
+                width:50.7%;
+                height:30.9%;
+                min-height:0;
+                overflow:hidden;
+                display:block;
+                font-family:Arial,sans-serif;
+                background:#fff8e8;
+                z-index:3;
+            }
+
+            #consoleGame[hidden] {
+                display:none !important;
+            }
+
+            #consoleGame:not([hidden]) {
+                display:block;
+            }
+
+            #consoleGameContent {
+                position:relative;
+                width:100%;
+                height:100%;
+                min-width:0;
+                min-height:0;
+                overflow:hidden;
+            }
+
+            #consoleGame #bodyRippleContainer {
+                position: fixed;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;
+                z-index: 0;
+            }
+
+            #consoleGame .bodyRipple {
+                position: absolute;
+                width: 80px;
+                height: 80px;
+                border: 5px solid rgba(255, 255, 255, 0.55);
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+                animation: bodyRippleEffect 1.2s ease-out forwards;
+            }
+
+            @keyframes bodyRippleEffect {
+                0% {
+                    transform: translate(-50%, -50%) scale(0);
+                    opacity: 0.75;
+                }
+
+                100% {
+                    transform: translate(-50%, -50%) scale(20);
+                    opacity: 0;
+                }
+            }
+
+            #gameArea {
+                position: relative;
+                width: 900px;
+                height: 400px;
+                overflow: hidden;
+                background: linear-gradient(to bottom, #bfe7ff, #eaf8ff);
+                border: 5px double #2563eb;
+                border-radius: 15px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                z-index: 2;
+            }
+
+            #ground {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 35px;
+                background: #6b4f2a;
+                border-top: 5px solid #4a351d;
+            }
+
+            #brownie {
+                position: absolute;
+                width: 48px;
+                height: 150px;
+                left: 12%;
+                bottom: 35px;
+                background: #7b3f00;
+                border: 4px solid #4a2500;
+                border-radius: 10px;
+                box-shadow: inset 5px 5px 0 rgba(255, 255, 255, 0.15), inset -5px -5px 0 rgba(0, 0, 0, 0.15);
+                z-index: 5;
+            }
+
+            #brownie::before {
+                content: "";
+                position: absolute;
+                width: 7px;
+                height: 7px;
+                top: 9px;
+                left: 8px;
+                background: #1f1308;
+                border-radius: 50%;
+                box-shadow: 17px 0 #1f1308;
+            }
+
+            .leg {
+                position: absolute;
+                width: 10px;
+                height: 8px;
+                bottom: -9px;
+                background: #4a2500;
+                border-radius: 0 0 4px 4px;
+            }
+
+            .leg.one {
+                left: 7px;
+            }
+
+            .leg.two {
+                right: 7px;
+            }
+
+            #potato {
+                position: absolute;
+                width: 58px;
+                height: 50px;
+                right: -60px;
+                bottom: 35px;
+                background: #c58b45;
+                border: 4px solid #805522;
+                border-radius: 50% 45% 55% 40%;
+                transform: rotate(-12deg);
+                z-index: 5;
+            }
+
+            #potato::before {
+                content: "";
+                position: absolute;
+                width: 5px;
+                height: 5px;
+                top: 6px;
+                left: 8px;
+                background: #805522;
+                border-radius: 50%;
+                box-shadow: 15px 5px #805522, 5px 14px #805522, 23px 16px #805522;
+            }
+
+            #score, #speed {
+                position: absolute;
+                left: 20px;
+                color: #1e3a8a;
+                font-weight: bold;
+                z-index: 10;
+            }
+
+            #score {
+                top: 15px;
+                font-size: 22px;
+            }
+
+            #speed {
+                top: 45px;
+                font-size: 16px;
+            }
+
+            .screen {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background: rgba(255, 255, 255, 0.88);
+                z-index: 20;
+            }
+
+            .screen h1 {
+                margin: 0 0 10px;
+                text-align: center;
+                font-size: 48px;
+                color: #4a2500;
+            }
+
+            .screen p {
+                margin: 5px 0 20px;
+                font-size: 18px;
+                color: #333;
+            }
+
+            .screen button {
+                padding: 12px 28px;
+                border: none;
+                border-radius: 10px;
+                background: #2563eb;
+                color: #fff;
+                font-size: 18px;
+                font-weight: bold;
+                cursor: pointer;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .screen button:hover {
+                background: #1d4ed8;
+            }
+
+            #deathScreen {
+                display: none;
+            }
+
+            #consoleGame:not([hidden]) {
+                min-height:0;
+                height:30.9%;
+                overflow:hidden;
+                background:#fff8e8;
+            }
+
+            body.embedded #consoleGame #bodyRippleContainer {
+                display:none;
+            }
+
+            #consoleGame #gameArea {
+                width:100%;
+                height:100%;
+                border:0;
+                border-radius:0;
+                box-shadow:none;
+                background:linear-gradient(to bottom,#f6dfd0,#fff5e7);
+            }
+
+            #consoleGame #ground {
+                height:10%;
+                border-top-width:2px;
+                background:#a87558;
+            }
+
+            #consoleGame #brownie {
+                width:6%;
+                height:34%;
+                bottom:10%;
+                border-width:2px;
+                border-radius:5px;
+            }
+
+            #consoleGame #brownie::before {
+                width:4px;
+                height:4px;
+                top:5px;
+                left:4px;
+                box-shadow:8px 0 #1f1308;
+            }
+
+            #consoleGame .leg {
+                width:5px;
+                height:4px;
+                bottom:-5px;
+            }
+
+            #consoleGame .leg.one {
+                left:4px;
+            }
+
+            #consoleGame .leg.two {
+                right:4px;
+            }
+
+            #consoleGame #potato {
+                width:7%;
+                height:14%;
+                bottom:10%;
+                border-width:2px;
+            }
+
+            #consoleGame #potato::before {
+                width:3px;
+                height:3px;
+                top:3px;
+                left:4px;
+                box-shadow:7px 2px #805522,3px 7px #805522,10px 8px #805522;
+            }
+
+            #consoleGame #score {
+                display:none;
+            }
+
+            #consoleGame #speed {
+                left:auto;
+                right:3%;
+                top:3%;
+                font-size:clamp(6px,2.1vw,10px);
+                color:#713d3b;
+            }
+
+            #consoleGame .screen {
+                padding:4px;
+                background:rgba(255,248,232,.94);
+            }
+
+            #consoleGame .screen h1 {
+                margin:0 0 4px;
+                font-size:clamp(10px,3.4vw,17px);
+                line-height:1.05;
+                color:#713d3b;
+            }
+
+            #consoleGame .screen p {
+                margin:2px 0 6px;
+                font-size:clamp(7px,2.1vw,10px);
+                line-height:1.1;
+            }
+
+            #consoleGame .screen button {
+                padding:4px 7px;
+                border-radius:6px;
+                background:#a75d61;
+                font-size:clamp(7px,2.2vw,10px);
+                box-shadow:none;
+            }
+
+            #consoleGame .screen button:hover {
+                background:#87454b;
+            }
+
+            #consoleGame #deathScreen h1 {
+                font-size:clamp(8px,2.8vw,14px);
+            }
+
+            #consoleGame #deathScreen p {
+                margin:2px 0 5px;
+            }
+
+            #consoleGame #gameArea {
+                width:100%;
+                height:100%;
+                min-width:0;
+                min-height:0;
+                border:0;
+                border-radius:0;
+                box-shadow:none;
+                background:linear-gradient(to bottom,#f6dfd0,#fff5e7);
+            }
+
+            .page[data-index="1"] {
+                overflow-y:auto;
+            }
+
+            .page[data-index="1"] .products-heading-image {
+                width:clamp(190px, 30vw, 280px) !important;
+                max-width:75%;
+                max-height:none !important;
+                height:auto !important;
+                margin:-60px 0px -75px -35px !important;
+                object-fit:contain;
+                object-position:left center;
+            }
+
+            .page[data-index="1"] .products-heading-fallback {
+                font-size:clamp(28px,4vw,40px) !important;
+                line-height:1.05;
+                margin:0 0 18px !important;
+            }
+
+            .page[data-index="1"] .products {
+                display:grid;
+                grid-template-columns:repeat(2,minmax(0,1fr));
+                gap:clamp(10px,2vw,22px);
+                align-items:start;
+                width:100%;
+            }
+
+            .page[data-index="1"] .product {
+                min-width:0;
+                cursor:pointer;
+                padding:8px 8px 28px;
+                display:flex;
+                justify-content:center;
+            }
+
+            .page[data-index="1"] .product-card-art {
+                position:relative;
+                width:min(100%, 260px);
+                aspect-ratio:1 / 1;
+                min-height:0;
+                margin:0 auto;
+                overflow:visible;
+                box-sizing:border-box;
+                border:4px solid #171717;
+                border-radius:30px;
+                background:#fff;
+                box-shadow:inset 0 0 0 5px #fff, inset 0 0 0 9px #171717;
+            }
+
+            .page[data-index="1"] .product-photo {
+                top:7%;
+                left:0%;
+                width:100%;
+                height:80%;
+                object-fit:contain;
+                object-position:center;
+            }
+
+            .page[data-index="1"] .product-card-decoration {
+                top:6%;
+                right:-16%;
+                width:45%;
+                height:45%;
+            }
+
+            .page[data-index="1"] .product-title-row {
+                isolation:auto;
+                position:absolute;
+                z-index:4;
+                left:20%;
+                right:2%;
+                bottom:2%;
+                height:21%;
+                min-height:0;
+                padding:0;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                overflow:visible;
+                border:0;
+                border-radius:0;
+                background:transparent;
+                box-shadow:none;
+            }
+
+            .page[data-index="1"] .product-title-row::before, .page[data-index="1"] .product-title-row::after {
+                content:none !important;
+                display:none !important;
+            }
+
+            .page[data-index="1"] .product-title-bear {
+                position:absolute;
+                z-index:5;
+                left:-55%;
+                bottom:-36%;
+                display:block;
+                width:67%;
+                height:170%;
+                object-fit:contain;
+                object-position:center bottom;
+                flex:0 0 auto;
+            }
+
+            .page[data-index="1"] .product-name-art {
+                position:relative;
+                z-index:2;
+                display:block !important;
+                top:15%;
+                left:-15%;
+                width:550%;
+                height:550%;
+                max-width:550%;
+                max-height:550%;
+                object-fit:contain;
+                object-position:center;
+                background:transparent;
+                border:0;
+                border-radius:0;
+                box-shadow:none;
+            }
+
+            .page[data-index="1"] .product-name-fallback {
+                display:none !important;
+            }
+
+            .product-modal {
+                padding:clamp(8px,2vh,18px) !important;
+                overflow:hidden;
+            }
+
+            .product-modal-panel {
+                width:min(680px,96vw) !important;
+                max-height:calc(100dvh - 16px) !important;
+                gap:clamp(7px,1.3vh,13px) !important;
+                overflow:visible !important;
+            }
+
+            .product-bear-frame {
+                width:min(84vw,490px) !important;
+                height:auto;
+                aspect-ratio:1/1;
+                max-height:58dvh !important;
+                flex:0 1 auto !important;
+            }
+
+            .product-bear-background {
+                display:block !important;
+                top:-5%;
+                left:-5%;
+                width:110%;
+                height:110%;
+                object-fit:contain;
+            }
+
+            .product-modal-photo {
+                width:58% !important;
+                height:58% !important;
+                max-width:58%;
+                max-height:58%;
+                object-fit:contain;
+                border:4px solid #fffdf7;
+                border-radius:18px;
+                background:#fffdf7;
+                box-sizing:border-box;
+            }
+
+            .product-modal-description {
+                width:min(92%,560px) !important;
+                max-height:24dvh !important;
+                overflow:auto;
+                padding:clamp(9px,1.5vh,14px) clamp(12px,2vw,20px) !important;
+                font-size:clamp(12px,1.8vw,16px) !important;
+                line-height:1.4 !important;
+            }
+
+            .product-modal-close {
+                top:0 !important;
+                right:0 !important;
+            }
+
+            @media (max-width:750px) {
+                .page[data-index="1"] .products {
+                    grid-template-columns:repeat(2,minmax(0,1fr));
+                    gap:6px;
+                }
+
+                .page[data-index="1"] .product {
+                    padding:4px 3px 24px;
+                }
+
+                .page[data-index="1"] .product-card-art {
+                    width:min(100%, 230px);
+                    aspect-ratio:1 / 1;
+                    border-radius:22px;
+                }
+
+                .page[data-index="1"] .product-photo {
+                    top:-4%;
+                    left:-10%;
+                    width:120%;
+                    height:100%;
+                }
+
+                .page[data-index="1"] .product-title-row {
+                    left:20%;
+                    right:2%;
+                    bottom:2%;
+                    height:21%;
+                }
+
+                .page[data-index="1"] .product-title-bear {
+                    left:-33%;
+                    width:36%;
+                    height:135%;
+                }
+
+                .page[data-index="1"] .product-name-art {
+                    max-width:100%;
+                    max-height:100%;
+                }
+
+                .product-bear-frame {
+                    width:min(88vw,410px) !important;
+                    max-height:53dvh !important;
+                }
+
+                .product-modal-description {
+                    width:94% !important;
+                    max-height:25dvh !important;
+                    font-size:clamp(11px,3.2vw,14px) !important;
+                }
+            }
+
+            @media (max-height:700px) {
+                .product-bear-frame {
+                    width:min(66vh,400px) !important;
+                    max-height:51dvh !important;
+                }
+
+                .product-modal-description {
+                    max-height:25dvh !important;
+                }
+            }
+        
+            /* Documentation gallery */
+            .documentation-page {
+                padding: 30px 24px 40px;
+                overflow-y: auto;
+            }
+
+            .documentation-gallery {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 28px 34px;
+                align-items: start;
+            }
+
+            .documentation-photo {
+                position: relative;
+                width: 88%;
+                justify-self: center;
+                min-width: 0;
+                padding: 12px 12px 24px;
+                border: 4px solid #292522;
+                background: #fff;
+                box-shadow: 3px 4px 0 rgba(41, 37, 34, .18);
+                cursor: zoom-in;
+                transform: rotate(-3deg);
+                transition: transform .25s ease, box-shadow .25s ease;
+            }
+
+            .documentation-photo:nth-child(2),
+            .documentation-photo:nth-child(4) {
+                transform: rotate(2deg);
+            }
+
+            .documentation-photo:hover,
+            .documentation-photo:focus-visible {
+                transform: translateY(-4px) rotate(0);
+                box-shadow: 5px 8px 0 rgba(41, 37, 34, .18);
+                outline: none;
+            }
+
+            .documentation-photo-image {
+                display: block;
+                width: 100%;
+                aspect-ratio: 1.15 / 1;
+                object-fit: cover;
+                background: #fffdf8;
+            }
+
+            .documentation-clover-pin {
+                position: absolute;
+                z-index: 2;
+                top: -40px;
+                left: 50%;
+                width: 100px;
+                height: 100px;
+                object-fit: contain;
+                transform: translateX(-50%);
+                pointer-events: none;
+            }
+
+            .documentation-photo.featured {
+                grid-column: 1 / -1;
+                width: 78%;
+                justify-self: center;
+                margin-top: 12px;
+                padding: 14px 14px 30px;
+                transform: rotate(0);
+            }
+
+            .documentation-photo.featured .documentation-photo-image {
+                aspect-ratio: 1.55 / 1;
+            }
+
+            .documentation-photo.featured .documentation-clover-pin:last-of-type {
+                left: 88%;
+            }
+
+            .documentation-clover-pin.featured1 {
+                left: 12%;
+            }
+
+            .documentation-lightbox {
+                position: fixed;
+                inset: 0;
+                z-index: 30000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+                background: rgba(35, 24, 20, .76);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .3s ease, visibility .3s ease;
+            }
+
+            .documentation-lightbox.is-open {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            .documentation-lightbox-panel {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+                width: min(760px, 94vw);
+                max-height: 94vh;
+                transform: translateY(16px) scale(.96);
+                transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+            }
+
+            .documentation-lightbox.is-open .documentation-lightbox-panel {
+                transform: translateY(0) scale(1);
+            }
+
+            .documentation-lightbox-photo-frame {
+                position: relative;
+                width: min(64vw, 520px);
+                max-height: 62vh;
+                padding: 12px 12px 22px;
+                border: 4px solid #292522;
+                background: #fff;
+                box-shadow: 0 12px 35px #0004;
+            }
+
+            .documentation-lightbox-photo {
+                display: block;
+                width: 100%;
+                height: min(55vh, 480px);
+                object-fit: contain;
+                background: #fff;
+                opacity: 1;
+                transition: opacity .45s ease;
+            }
+
+            .documentation-lightbox-photo.is-switching {
+                opacity: 0;
+            }
+
+            .documentation-lightbox-pin {
+                position: absolute;
+                z-index: 2;
+                top: -40px;
+                left: 50%;
+                width: 100px;
+                height: 100px;
+                object-fit: contain;
+                transform: translateX(-50%);
+                pointer-events: none;
+            }
+
+            .documentation-lightbox-description {
+                box-sizing: border-box;
+                width: min(100%, 620px);
+                max-height: 25vh;
+                overflow: auto;
+                padding: 16px 20px;
+                border: 3px solid #292522;
+                background: #fffdf8;
+                color: #302925;
+                text-align: center;
+                line-height: 1.6;
+                box-shadow: 0 5px 0 rgba(0, 0, 0, .15);
+            }
+
+            .documentation-lightbox-close {
+                position: absolute;
+                top: -12px;
+                right: -12px;
+                z-index: 5;
+                width: 38px;
+                height: 38px;
+                border: 3px solid #292522;
+                border-radius: 50%;
+                background: #fffdf8;
+                color: #302925;
+                font: inherit;
+                font-size: 24px;
+                line-height: 1;
+                cursor: pointer;
+            }
+
+            @media (max-width: 600px) {
+                .documentation-page {
+                    padding: 24px 12px 30px;
+                }
+
+                .documentation-gallery {
+                    gap: 26px 18px;
+                }
+
+                .documentation-photo {
+                    width: 92%;
+                    padding: 8px 8px 18px;
+                    border-width: 3px;
+                }
+
+                .documentation-clover-pin {
+                    width: 64px;
+                    height: 64px;
+                    top: -25px;
+                }
+
+                .documentation-photo.featured {
+                    width: 88%;
+                    padding: 9px 9px 22px;
+                }
+
+                .documentation-lightbox-photo-frame {
+                    width: min(82vw, 480px);
+                    padding: 8px 8px 16px;
+                }
+
+                .documentation-lightbox-photo {
+                    height: min(48vh, 400px);
+                }
+
+                .documentation-lightbox-pin {
+                    width: 76px;
+                    height: 76px;
+                    top: -28px;
+                }
+
+                .documentation-lightbox-description {
+                    padding: 12px;
+                    font-size: 13px;
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .documentation-photo,
+                .documentation-lightbox,
+                .documentation-lightbox-panel,
+                .documentation-lightbox-photo {
+                    transition-duration: .01ms !important;
+                }
+            }
+</style>
+    </head>
+    <body>
+        <audio id="backgroundMusic" preload="auto"></audio>
+        <div class="now-playing" id="nowPlaying">
+            <div class="now-playing-label">NOW PLAYING</div>
+            <div class="now-playing-title" id="songTitle">Song Title</div>
+            <div class="now-playing-artist" id="songArtist">Artist</div>
+        </div>
+        <div class="intro-screen" id="introScreen" aria-hidden="true">
+            <img class="intro-media" src="intro.gif" alt="" draggable="false">
+        </div>
+        <div class="website">
+            <header class="title storefront-header">
+                <img class="storefront-image" src="https://craftic27.github.io/Bear-Bites-Assets/storefront-header.png" alt="Bear & Bites storefront sign and awning">
+                <nav class="navigation" aria-label="Main navigation">
+                    <a href="#home" class="tab home active" data-page="0" aria-label="Home"><img src="https://craftic27.github.io/Bear-Bites-Assets/home-icon.png" alt=""></a>
+                    <a href="#products" class="tab" data-page="1" aria-label="Products"><img src="https://craftic27.github.io/Bear-Bites-Assets/products-icon.png" alt=""></a>
+                    <a href="#contact" class="tab tab4" data-page="3" aria-label="Documentation"><img src="https://craftic27.github.io/Bear-Bites-Assets/docs-icon.png" alt=""></a>
+                </nav>
+            </header>
+            <main class="main-container">
+                <div class="utility-toggles" aria-label="Site controls">
+                    <button class="music-toggle sound-switch" id="musicToggle" type="button" aria-label="Mute music" aria-pressed="false" title="Mute music"><span class="sound-knob"><img id="soundIcon" src="https://craftic27.github.io/Bear-Bites-Assets/unmuted.png" alt="Sound on"></span></button>
+                </div>
+                <div class="page-area">
+                    <section class="page active home-page" data-index="0">
+                        <div class="poster-slot" aria-label="Poster image preview">
+                            <img src="https://craftic27.github.io/Bear-Bites-Assets/poster.png" alt="Poster" onerror="this.closest('.poster-slot').style.display='none'">
+                        </div>
+                        <div class="home-feature cookie-feature">
+                            <div class="cookie-art">
+                                <img src="https://craftic27.github.io/Bear-Bites-Assets/cookie-logo.png" alt="Cookie logo artwork" onerror="this.style.display='none'">
+                            </div>
+                            <div class="cookie-copy">
+                                <h2>About</h2>
+                                <p>Bear & Bites is a snack business that offers delicious, bite-sized treats made to satisfy every craving. From rich and fudgy Bear Bites paired with creamy ube dip to crispy and cheesy Tato Tops packed with flavorful longganisa, we bring together unique flavors and satisfying textures in every bite. Our goal is to make snack time more enjoyable by serving delicious, creative, and satisfying treats that everyone can love.</p>
+                            </div>
+                        </div>
+                        <div class="home-feature bakery-feature">
+                            <img src="https://craftic27.github.io/Bear-Bites-Assets/bakery-shelf.gif" alt="Bakery display image" onerror="this.style.display='none'">
+                        </div>
+                        <div class="console-section">
+                            <button class="console-toggle" id="consoleToggle" type="button" aria-label="Open the Nintendo" aria-expanded="false">
+                                <img id="consoleImage" src="https://craftic27.github.io/Bear-Bites-Assets/console-closed.png" alt="Closed Nintendo console">
+                            </button>
+                            <div class="console-game" id="consoleGame" aria-label="Main game screen" hidden>
+                                <div id="consoleGameContent">
+                                    <div id="bodyRippleContainer"></div>
+                                    <div id="gameArea">
+                                        <div id="startScreen" class="screen">
+                                            <h1>Jump the Potatoes</h1>
+                                            <p>Jump over the potatoes!</p>
+                                            <button id="startButton">Start Game</button>
+                                        </div>
+                                        <div id="deathScreen" class="screen">
+                                            <h1>GAME OVER YOU GOT HIT BY A POTATO</h1>
+                                            <p id="finalScore">Score: 0</p>
+                                            <button id="restartButton">Play Again</button>
+                                        </div>
+                                        <div id="score">Score: 0</div>
+                                        <div id="speed">Speed: 100%</div>
+                                        <div id="brownie">
+                                            <div class="leg one"></div>
+                                            <div class="leg two"></div>
+                                        </div>
+                                        <div id="potato"></div>
+                                        <div id="ground"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="console-score" id="consoleScore" aria-live="polite" hidden>Score: 0</div>
+                        </div>
+                    </section>
+                    <section class="page stack-1" data-index="1">
+                        <img class="products-heading-image image-slot-empty" data-image-slot="products-heading" src="https://craftic27.github.io/Bear-Bites-Assets/products.png" alt="Products" aria-label="Products heading artwork">
+                        <div class="products-heading-fallback">Products</div>
+                        <div class="products">
+                            <article class="product" tabindex="0" role="button" aria-haspopup="dialog" data-name="Bear Bites" data-description="Bear Bites are rich, chocolatey brownies served with a velvety and creamy ube dip. Made with semi-sweet chocolate, cocoa powder, and butter, these brownies have a slightly crackly outside with a soft, fudgy center. The combination of deep rich chocolate and sweet nutty ube creates a unique and delicious flavor, making every bite a mouthwatering experience. Get yours now for only ₱62">
+                                <div class="product-card-art">
+                                    <img class="product-photo image-slot-empty" data-image-slot="brownie-product" src="https://craftic27.github.io/Bear-Bites-Assets/brownies.png" alt="Bear Bites">
+                                    <img class="product-card-decoration image-slot-empty" data-image-slot="brownie-decoration" src="https://craftic27.github.io/Bear-Bites-Assets/products-design.png" alt="" aria-hidden="true">
+                                    <div class="product-title-row">
+                                        <img class="product-title-bear peace-bear image-slot-empty" data-image-slot="peace-sign-bear" src="https://craftic27.github.io/Bear-Bites-Assets/bear-face.png" alt="Peace-sign bear mascot" aria-hidden="true">
+                                        <img class="product-name-art image-slot-empty" data-image-slot="brownie-name" src="https://craftic27.github.io/Bear-Bites-Assets/bear-bites.png" alt="Bear Bites">
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="product" tabindex="0" role="button" aria-haspopup="dialog" data-name="Tato Tops" data-description="Tato Tops are crispy, golden, marbled spud potatoes with melted cheese and flavorful longganisa bits. Seasoned with garlic, pepper, salt, and paprika, each bite offers an explosion of flavors. With a perfect balance of savory, cheesy, and a slight tangy flavors, these potato bites are crispy on the outside, and creamy on the inside, creating a delicious combination that makes every bite worth craving. Get yours now for only ₱40">
+                                <div class="product-card-art">
+                                    <img class="product-photo image-slot-empty" data-image-slot="tato-product" src="https://craftic27.github.io/Bear-Bites-Assets/potatoes.png" alt="Tato Tops">
+                                    <img class="product-card-decoration image-slot-empty" data-image-slot="tato-decoration" src="https://craftic27.github.io/Bear-Bites-Assets/products-design.png" alt="" aria-hidden="true">
+                                    <div class="product-title-row">
+                                        <img class="product-title-bear peace-bear image-slot-empty" data-image-slot="peace-sign-bear" src="https://craftic27.github.io/Bear-Bites-Assets/bear-face.png" alt="Peace-sign bear mascot" aria-hidden="true">
+                                        <img class="product-name-art image-slot-empty" data-image-slot="tato-name" src="https://craftic27.github.io/Bear-Bites-Assets/tato-tops.png" alt="Tato Tops">
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                    <section class="page stack-3 documentation-page" data-index="3">
+                        <div class="documentation-gallery">
+                            <button class="documentation-photo" type="button" data-doc-id="photo1" aria-label="Open documentation photo 1">
+                                <img class="documentation-photo-image" src="https://craftic27.github.io/Bear-Bites-Assets/Designing1.jpg" alt="Documentation photo 1">
+                                <img class="documentation-clover-pin" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                            </button>
+                            <button class="documentation-photo" type="button" data-doc-id="photo2" aria-label="Open documentation photo 2">
+                                <img class="documentation-photo-image" src="https://craftic27.github.io/Bear-Bites-Assets/Cooking1.jpg" alt="Documentation photo 2">
+                                <img class="documentation-clover-pin" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                            </button>
+                            <button class="documentation-photo" type="button" data-doc-id="photo3" aria-label="Open documentation photo 3">
+                                <img class="documentation-photo-image" src="https://craftic27.github.io/Bear-Bites-Assets/Grazing1.jpg" alt="Documentation photo 3">
+                                <img class="documentation-clover-pin" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                            </button>
+                            <button class="documentation-photo" type="button" data-doc-id="photo4" aria-label="Open documentation photo 4">
+                                <img class="documentation-photo-image" src="https://craftic27.github.io/Bear-Bites-Assets/Stalls1.jpeg" alt="Documentation photo 4">
+                                <img class="documentation-clover-pin" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                            </button>
+                            <button class="documentation-photo featured" type="button" data-doc-id="featured" aria-label="Open featured documentation photo">
+                                <img class="documentation-photo-image" src="https://craftic27.github.io/Bear-Bites-Assets/Selling1.jpg" alt="Featured documentation photo">
+                                <img class="documentation-clover-pin featured1" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                                <img class="documentation-clover-pin" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+        <div class="product-modal" id="productModal" role="dialog" aria-modal="true" aria-label="Product details" aria-hidden="true">
+            <div class="product-modal-panel">
+                <button class="product-modal-close" type="button" aria-label="Close product details">×</button>
+                <div class="product-bear-frame">
+                    <img class="product-bear-background image-slot-empty" id="productBearBackground" data-image-slot="bear-background" src="https://craftic27.github.io/Bear-Bites-Assets/bear.png" alt="" aria-hidden="true">
+                    <img class="product-modal-photo" id="productModalPhoto" alt="">
+                </div>
+                <div class="product-modal-description" id="productModalDescription"></div>
+            </div>
+        </div>
+        <div class="documentation-lightbox" id="documentationLightbox" role="dialog" aria-modal="true" aria-label="Documentation photo details" aria-hidden="true">
+            <div class="documentation-lightbox-panel">
+                <button class="documentation-lightbox-close" type="button" aria-label="Close documentation photo">×</button>
+                <div class="documentation-lightbox-photo-frame">
+                    <img class="documentation-lightbox-photo" id="documentationLightboxPhoto" src="" alt="">
+                    <img class="documentation-lightbox-pin" src="https://craftic27.github.io/Bear-Bites-Assets/clover.png" alt="">
+                </div>
+                <div class="documentation-lightbox-description" id="documentationLightboxDescription"></div>
+            </div>
+        </div>
+        <div class="poster-lightbox" id="posterLightbox" role="dialog" aria-label="Expanded poster image" aria-modal="true" tabindex="-1">
+            <img src="https://craftic27.github.io/Bear-Bites-Assets/poster.png" alt="Website poster enlarged">
+        </div>
+        <script>
+            const embeddedMode = true;
+            function reportScore(value) {
+                const scorePanel = document.getElementById("consoleScore");
+                if (scorePanel) scorePanel.textContent = "Score: " + (Number(value) || 0);
+            }
+
+            const gameArea = document.getElementById("gameArea");
+            const brownie = document.getElementById("brownie");
+            const potato = document.getElementById("potato");
+            const scoreDisplay = document.getElementById("score");
+            const speedDisplay = document.getElementById("speed");
+            const startScreen = document.getElementById("startScreen");
+            const deathScreen = document.getElementById("deathScreen");
+            const startButton = document.getElementById("startButton");
+            const restartButton = document.getElementById("restartButton");
+            const finalScoreDisplay = document.getElementById("finalScore");
+            const bodyRippleContainer = document.getElementById("bodyRippleContainer");
+            let gameRunning = false;
+            let gameOver = false;
+            let score = 0;
+            let speedMultiplier = 1;
+            let potatoX = 0;
+            let lastTime = 0;
+            let scoreTimer = 0;
+            let jumping = false;
+            let verticalVelocity = 0;
+            const gravity = 1800;
+            const jumpStrength = 700;
+            const baseSpeed = 500;
+            function gameScale() {
+                return embeddedMode ? Math.max(0.25, gameArea.clientHeight / 400) : 1;
+            }
+
+            function groundBottom() {
+                return embeddedMode ? gameArea.clientHeight * 0.10 : 35;
+            }
+
+            function createBackgroundRipple() {
+                for (let i = 0; i < 3; i++) {
+                    const ripple = document.createElement("div");
+                    ripple.className = "bodyRipple";
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    ripple.style.left = x + "px";
+                    ripple.style.top = y + "px";
+                    ripple.style.animationDelay = (i * 0.15) + "s";
+                    bodyRippleContainer.appendChild(ripple);
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 1500);
+                }
+            }
+
+            function startGame() {
+                gameRunning = true;
+                gameOver = false;
+                score = 0;
+                speedMultiplier = 1;
+                scoreTimer = 0;
+                potatoX = gameArea.clientWidth + 50;
+                potato.style.left = potatoX + "px";
+                potato.style.right = "auto";
+                brownie.style.bottom = groundBottom() + "px";
+                jumping = false;
+                verticalVelocity = 0;
+                scoreDisplay.textContent = "Score: 0";
+                reportScore(0);
+                speedDisplay.textContent = "Speed: 100%";
+                startScreen.style.display = "none";
+                deathScreen.style.display = "none";
+                lastTime = performance.now();
+                requestAnimationFrame(gameLoop);
+            }
+
+            function jump() {
+                if (!gameRunning || gameOver) {
+                    return;
+                }
+
+                if (!jumping) {
+                    jumping = true;
+                    verticalVelocity = jumpStrength * gameScale();
+                    createBackgroundRipple();
+                }
+            }
+
+            function endGame() {
+                gameRunning = false;
+                gameOver = true;
+                finalScoreDisplay.textContent = "Score: " + score;
+                reportScore(score);
+                deathScreen.style.display = "flex";
+            }
+
+            function checkCollision() {
+                const brownieRect = brownie.getBoundingClientRect();
+                const potatoRect = potato.getBoundingClientRect();
+                const padding = embeddedMode ? Math.max(1, gameArea.clientHeight * 0.012) : 6;
+                return (
+                    brownieRect.right - padding > potatoRect.left + padding &&
+                    brownieRect.left + padding < potatoRect.right - padding &&
+                    brownieRect.bottom - padding > potatoRect.top + padding &&
+                    brownieRect.top + padding < potatoRect.bottom - padding
+                );
+            }
+
+            function gameLoop(currentTime) {
+                if (!gameRunning) {
+                    return;
+                }
+
+                const deltaTime = Math.min((currentTime - lastTime) / 1000, 0.05);
+                lastTime = currentTime;
+                if (jumping) {
+                    verticalVelocity -= gravity * gameScale() * deltaTime;
+                    let currentBottom = parseFloat(getComputedStyle(brownie).bottom);
+                    currentBottom += verticalVelocity * deltaTime;
+                    const floor = groundBottom();
+                    if (currentBottom <= floor) {
+                        currentBottom = floor;
+                        jumping = false;
+                        verticalVelocity = 0;
+                    }
+
+                    brownie.style.bottom = currentBottom + "px";
+                }
+
+                const currentSpeed = baseSpeed * gameScale() * speedMultiplier;
+                potatoX -= currentSpeed * deltaTime;
+                potato.style.left = potatoX + "px";
+                if (potatoX < -70) {
+                    potatoX = gameArea.clientWidth + 100 + Math.random() * 250;
+                    potato.style.left = potatoX + "px";
+                }
+
+                scoreTimer += deltaTime;
+                if (scoreTimer >= 0.1) {
+                    scoreTimer = 0;
+                    score++;
+                    scoreDisplay.textContent = "Score: " + score;
+                    reportScore(score);
+                    if (score % 10 === 0) {
+                        speedMultiplier *= 1.005;
+                        speedDisplay.textContent = "Speed: " + Math.round(speedMultiplier * 100) + "%";
+                    }
+                }
+
+                if (checkCollision()) {
+                    endGame();
+                    return;
+                }
+
+                requestAnimationFrame(gameLoop);
+            }
+
+            startButton.addEventListener("click", function(event) {
+                event.stopPropagation();
+                startGame();
+            });
+
+            restartButton.addEventListener("click", function(event) {
+                event.stopPropagation();
+                startGame();
+            });
+
+            document.addEventListener("keydown", function(event) {
+                if (consoleGameIsVisible() && (event.code === "Space" || event.code === "ArrowUp")) {
+                    event.preventDefault();
+                    jump();
+                }
+            });
+
+            function consoleGameIsVisible() {
+                const game = document.getElementById("consoleGame");
+                return !!game && !game.hidden;
+            }
+
+            gameArea.addEventListener("pointerdown", function(event) {
+                if (event.target === startButton || event.target === restartButton) {
+                    return;
+                }
+
+                jump();
+            });
+
+
+            const pages = [...document.querySelectorAll(".page")];
+            const tabs = [...document.querySelectorAll(".tab")];
+            let currentIndex = 0;
+            let isAnimating = false;
+            function updateStack(newIndex) {
+                pages.forEach((page, index) => {
+                    page.classList.remove("active", "stack-1", "stack-2", "stack-3");
+                    const distance = (index - newIndex + pages.length) % pages.length;
+                    if (distance === 0) {
+                        page.classList.add("active");
+                    }
+
+                    else if (distance === 1) {
+                        page.classList.add("stack-1");
+                    }
+
+                    else if (distance === 2) {
+                        page.classList.add("stack-2");
+                    }
+
+                    else {
+                        page.classList.add("stack-3");
+                    }
+                });
+
+                tabs.forEach((tab, index) => {
+                    tab.classList.toggle("active", index === newIndex);
+                });
+
+                currentIndex = newIndex;
+            }
+
+            function changePage(newIndex) {
+                if (isAnimating || newIndex === currentIndex) {
+                    return;
+                }
+
+                isAnimating = true;
+                updateStack(newIndex);
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 650);
+            }
+
+            tabs.forEach((tab, index) => {
+                tab.addEventListener("click", function(event) {
+                        event.preventDefault();
+                        changePage(index);
+                });
+            });
+
+            document.addEventListener("keydown", event => {
+                if (event.key === "ArrowRight") {
+                    const next = (currentIndex + 1) % pages.length;
+                    changePage(next);
+                }
+
+                if (event.key === "ArrowLeft") {
+                    const previous = (currentIndex - 1 + pages.length) % pages.length;
+                    changePage(previous);
+                }
+            });
+
+            const pageArea = document.querySelector(".page-area");
+            let startX = 0;
+            let startY = 0;
+            pageArea.addEventListener("touchstart", event => {
+                startX = event.touches[0].clientX;
+                startY = event.touches[0].clientY;
+            }, { passive: true });
+
+            pageArea.addEventListener("touchend", event => {
+                const endX = event.changedTouches[0].clientX;
+                const endY = event.changedTouches[0].clientY;
+                const differenceX = endX - startX;
+                const differenceY = endY - startY;
+                if (Math.abs(differenceX) > 60 && Math.abs(differenceX) > Math.abs(differenceY)) {
+                    if (differenceX < 0) {
+                        const next = (currentIndex + 1) % pages.length;
+                        changePage(next);
+                    }
+
+                    else {
+                        const previous = (currentIndex - 1 + pages.length) % pages.length;
+                        changePage(previous);
+                    }
+                }
+            }, { passive: true });
+
+            const introScreen = document.querySelector("#introScreen");
+            document.body.classList.add("intro-active");
+            function startPageIntro() {
+                if (!introScreen) {
+                    document.body.classList.remove("intro-active");
+                    document.body.classList.add("page-intro");
+                    return;
+                }
+
+                setTimeout(() => {
+                    introScreen.classList.add("is-finished");
+                    document.body.classList.remove("intro-active");
+                    document.body.classList.add("page-intro");
+                    setTimeout(() => {
+                        introScreen.remove();
+                    }, 800);
+
+                    setTimeout(() => {
+                        document.body.classList.remove("page-intro");
+                    }, 4050);
+                }, 3000);
+            }
+
+            const backgroundMusic = document.querySelector("#backgroundMusic");
+            const musicToggle = document.querySelector("#musicToggle");
+            const nowPlaying = document.querySelector("#nowPlaying");
+            const songTitle = document.querySelector("#songTitle");
+            const songArtist = document.querySelector("#songArtist");
+            const playlist = [
+            {
+                file: "https://craftic27.github.io/Bear-Bites-Assets/Day1.mp3",
+                title: "Day 1",
+                artist: "Red Velvet"
+            },
+            {
+                file: "https://craftic27.github.io/Bear-Bites-Assets/Sofia.mp3",
+                title: "Sofia",
+                artist: "Clairo"
+            },
+            {
+                file: "https://craftic27.github.io/Bear-Bites-Assets/Pain.mp3",
+                title: "Pain",
+                artist: "PinkPantheress"
+            }];
+
+            let currentSongIndex = 0;
+            let musicStarted = false;
+            function showNowPlaying(song) {
+                songTitle.textContent = song.title;
+                songArtist.textContent = song.artist;
+                nowPlaying.classList.remove("show");
+                void nowPlaying.offsetWidth;
+                nowPlaying.classList.add("show");
+                setTimeout(() => {
+                    nowPlaying.classList.remove("show");
+                }, 4000);
+            }
+
+            function loadSong(index) {
+                const song = playlist[index];
+                if (!song) {
+                    return;
+                }
+
+                backgroundMusic.src = song.file;
+                showNowPlaying(song);
+            }
+
+            function playNextSong() {
+                currentSongIndex++;
+                if (currentSongIndex >= playlist.length) {
+                    currentSongIndex = 0;
+                }
+
+                loadSong(currentSongIndex);
+                const playPromise = backgroundMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        musicStarted = false;
+                    });
+                }
+            }
+
+            backgroundMusic.addEventListener("ended", playNextSong);
+            function startBackgroundMusic() {
+                if (!backgroundMusic || musicStarted || playlist.length === 0) {
+                    return;
+                }
+
+                musicStarted = true;
+                backgroundMusic.muted = false;
+                backgroundMusic.volume = 0.5;
+                loadSong(currentSongIndex);
+                const playPromise = backgroundMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        musicStarted = false;
+                    });
+                }
+            }
+
+            function retryMusicAfterInteraction() {
+                if (!backgroundMusic || backgroundMusic.muted) {
+                    return;
+                }
+
+                if (backgroundMusic.paused) {
+                    const playPromise = backgroundMusic.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                                musicStarted = true;
+                        })
+                        
+                        .catch(() => {});
+                    }
+                }
+            }
+
+            if (musicToggle && backgroundMusic) {
+                musicToggle.addEventListener("click", () => {
+                    backgroundMusic.muted = !backgroundMusic.muted;
+                    const isMuted = backgroundMusic.muted;
+                    musicToggle.classList.toggle("is-muted", isMuted);
+                    const soundIcon = document.getElementById("soundIcon");
+                    if (soundIcon) {
+                        soundIcon.src = isMuted ? "https://craftic27.github.io/Bear-Bites-Assets/muted.png" : "https://craftic27.github.io/Bear-Bites-Assets/unmuted.png";
+                        soundIcon.alt = isMuted ? "Sound off" : "Sound on";
+                    }
+
+                    musicToggle.setAttribute("aria-label", isMuted ? "Unmute music" : "Mute music");
+                    musicToggle.setAttribute("title", isMuted ? "Unmute music" : "Mute music");
+                    musicToggle.setAttribute("aria-pressed", String(isMuted));
+                    if (!backgroundMusic.muted) {
+                        retryMusicAfterInteraction();
+                    }
+                });
+            }
+
+            setTimeout(() => {
+                startBackgroundMusic();
+            }, 4050);
+
+            const productModal = document.getElementById("productModal");
+            const productModalPhoto = document.getElementById("productModalPhoto");
+            const productModalDescription = document.getElementById("productModalDescription");
+            const productBearBackground = document.getElementById("productBearBackground");
+            const productCards = [...document.querySelectorAll(".product")];
+            let lastProductTrigger = null;
+            function closeProductModal() {
+                if (!productModal) return;
+                productModal.classList.remove("is-open");
+                productModal.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+                if (lastProductTrigger) lastProductTrigger.focus({ preventScroll: true });
+            }
+
+            function openProductModal(card) {
+                if (!productModal || !productModalPhoto || !productModalDescription) return;
+                const productPhoto = card.querySelector(".product-photo");
+                const photoSrc = productPhoto ? (productPhoto.getAttribute("src") || "") : "";
+                productModalPhoto.style.visibility = photoSrc ? "visible" : "hidden";
+                if (photoSrc) {
+                    productModalPhoto.onerror = () => {
+                        productModalPhoto.style.visibility = "hidden";
+                    };
+
+                    productModalPhoto.onload = () => {
+                        productModalPhoto.style.visibility = "visible";
+                    };
+
+                    if (productModalPhoto.getAttribute("src") !== photoSrc) productModalPhoto.setAttribute("src", photoSrc);
+                }
+                
+                else {
+                    productModalPhoto.removeAttribute("src");
+                    productModalPhoto.style.visibility = "hidden";
+                }
+
+                productModalPhoto.alt = card.dataset.name || "Product image";
+                productModalDescription.textContent = card.dataset.description || "";
+                lastProductTrigger = card;
+                productModal.classList.add("is-open");
+                productModal.setAttribute("aria-hidden", "false");
+                document.body.style.overflow = "hidden";
+                const closeButton = productModal.querySelector(".product-modal-close");
+                if (closeButton) closeButton.focus({ preventScroll: true });
+            }
+
+            function refreshImageSlot(img) {
+                const loaded = !!(img.complete && img.naturalWidth > 0);
+                img.classList.toggle("image-slot-empty", !loaded);
+                const card = img.closest(".product");
+                if (card && img.matches(".product-name-art")) card.classList.toggle("has-name-art", loaded);
+                if (img.matches(".products-heading-image")) {
+                    const fallback = document.querySelector(".products-heading-fallback");
+                    if (fallback) fallback.hidden = loaded;
+                }
+            }
+
+            document.querySelectorAll("[data-image-slot]").forEach(img => {
+                img.addEventListener("load", () => refreshImageSlot(img));
+                img.addEventListener("error", () => refreshImageSlot(img));
+                refreshImageSlot(img);
+            });
+
+            const productsHeadingFallback = document.querySelector(".products-heading-fallback");
+            if (productsHeadingFallback) productsHeadingFallback.style.cssText = "font-family: inherit; font-size: clamp(24px,4vw,34px); font-weight: 700; color: #9b4a2d; margin-bottom: 18px;";
+            productCards.forEach(card => {
+                card.addEventListener("click", () => openProductModal(card));
+                card.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openProductModal(card);
+                    }
+                });
+            });
+
+            productModal?.querySelector(".product-modal-close")?.addEventListener("click", closeProductModal);
+            productModal?.addEventListener("click", event => {
+                if (event.target === productModal) closeProductModal();
+            });
+
+            document.addEventListener("keydown", event => {
+                if (event.key === "Escape" && productModal?.classList.contains("is-open")) closeProductModal();
+            });
+
+            const consoleToggle = document.getElementById("consoleToggle");
+            const consoleImage = document.getElementById("consoleImage");
+            const consoleGame = document.getElementById("consoleGame");
+            const consoleScore = document.getElementById("consoleScore");
+            let consoleIsOpen = false;
+            consoleToggle?.addEventListener("click", () => {
+                consoleIsOpen = !consoleIsOpen;
+                consoleImage.src = consoleIsOpen ? "https://craftic27.github.io/Bear-Bites-Assets/console-open.png" : "https://craftic27.github.io/Bear-Bites-Assets/console-closed.png";
+                consoleImage.alt = consoleIsOpen ? "Open Nintendo console" : "Closed Nintendo console";
+                consoleToggle.setAttribute("aria-label", consoleIsOpen ? "Close the Nintendo" : "Open the Nintendo");
+                consoleToggle.setAttribute("aria-expanded", String(consoleIsOpen));
+                consoleGame.hidden = !consoleIsOpen;
+                consoleScore.hidden = !consoleIsOpen;
+            });
+
+            const posterSlot = document.querySelector(".poster-slot");
+            const posterLightbox = document.getElementById("posterLightbox");
+            function closePosterLightbox() {
+                posterLightbox?.classList.remove("is-open");
+                posterSlot?.setAttribute("aria-expanded", "false");
+            }
+
+            posterSlot?.setAttribute("role", "button");
+            posterSlot?.setAttribute("tabindex", "0");
+            posterSlot?.setAttribute("aria-label", "Click to enlarge poster");
+            posterSlot?.setAttribute("aria-expanded", "false");
+            posterSlot?.addEventListener("click", () => {
+                if (!posterLightbox) return;
+                posterLightbox.classList.add("is-open");
+                posterSlot.setAttribute("aria-expanded", "true");
+                posterLightbox.focus();
+            });
+            
+            posterSlot?.addEventListener("keydown", event => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    posterLightbox?.classList.add("is-open");
+                    posterSlot.setAttribute("aria-expanded", "true");
+                    posterLightbox?.focus();
+                }
+            });
+
+            posterLightbox?.addEventListener("click", closePosterLightbox);
+            posterLightbox?.querySelector("img")?.addEventListener("click", event => event.stopPropagation());
+            document.addEventListener("keydown", event => {
+                if (event.key === "Escape") closePosterLightbox();
+            });
+
+            const documentationGroups = {
+                photo1: {
+                    images: [
+                        "https://craftic27.github.io/Bear-Bites-Assets/Designing1.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Designing2.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Designing3.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Designing4.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Designing5.jpg",
+                    ],
+
+                    description: "Description for photo 1"
+                },
+
+                photo2: {
+                    images: [
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking1.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking2.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking3.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking4.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking5.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking6.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Cooking7.jpg"
+                    ],
+                    
+                    description: "Description for photo 2"
+                },
+
+                photo3: {
+                    images: [
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing1.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing2.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing3.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing4.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing5.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing6.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Grazing7.jpg"
+                    ],
+
+                    description: "Description for photo 3"
+                },
+
+                photo4: {
+                    images: [
+                        "https://craftic27.github.io/Bear-Bites-Assets/Stalls1.jpeg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Stalls2.jpeg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Stalls3.jpeg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Stalls4.jpeg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Stalls5.jpeg"
+                    ],
+
+                    description: "Description for photo 4"
+                },
+
+                featured: {
+                    images: [
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling1.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling2.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling3.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling4.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling5.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling6.jpg",
+                        "https://craftic27.github.io/Bear-Bites-Assets/Selling7.jpg"
+                    ],
+
+                    description: "Description for photo 5"
+                }
+            };
+
+            const documentationLightbox = document.getElementById("documentationLightbox");
+            const documentationLightboxPhoto = document.getElementById("documentationLightboxPhoto");
+            const documentationLightboxDescription = document.getElementById("documentationLightboxDescription");
+            let activeDocumentationGroup = null;
+            let activeDocumentationImageIndex = 0;
+            let documentationCycleTimer = null;
+
+            function showDocumentationImage(index) {
+                if (!activeDocumentationGroup) return;
+                const images = activeDocumentationGroup.images;
+                activeDocumentationImageIndex = index % images.length;
+                documentationLightboxPhoto.classList.add("is-switching");
+
+                window.setTimeout(() => {
+                    if (!documentationLightbox.classList.contains("is-open")) return;
+                    documentationLightboxPhoto.src = images[activeDocumentationImageIndex];
+                    documentationLightboxPhoto.alt = "Documentation image " + (activeDocumentationImageIndex + 1);
+                    documentationLightboxPhoto.onload = () => documentationLightboxPhoto.classList.remove("is-switching");
+                    documentationLightboxPhoto.onerror = () => documentationLightboxPhoto.classList.remove("is-switching");
+                }, 220);
+            }
+
+            function closeDocumentationLightbox() {
+                documentationLightbox.classList.remove("is-open");
+                documentationLightbox.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+                window.clearInterval(documentationCycleTimer);
+                documentationCycleTimer = null;
+                activeDocumentationGroup = null;
+            }
+
+            function openDocumentationLightbox(groupId) {
+                const group = documentationGroups[groupId];
+                if (!group || !group.images.length) return;
+                activeDocumentationGroup = group;
+                activeDocumentationImageIndex = 0;
+                documentationLightboxDescription.textContent = group.description;
+                documentationLightboxPhoto.onload = () => documentationLightboxPhoto.classList.remove("is-switching");
+                documentationLightboxPhoto.onerror = () => documentationLightboxPhoto.classList.remove("is-switching");
+                documentationLightboxPhoto.classList.remove("is-switching");
+                documentationLightboxPhoto.src = group.images[0];
+                documentationLightboxPhoto.alt = "Documentation image 1";
+                documentationLightbox.classList.add("is-open");
+                documentationLightbox.setAttribute("aria-hidden", "false");
+                document.body.style.overflow = "hidden";
+                window.clearInterval(documentationCycleTimer);
+                if (group.images.length > 1) {
+                    documentationCycleTimer = window.setInterval(() => {
+                        showDocumentationImage((activeDocumentationImageIndex + 1) % group.images.length);
+                    }, 2000);
+                }
+                documentationLightbox.querySelector(".documentation-lightbox-close").focus({ preventScroll: true });
+            }
+
+            document.querySelectorAll(".documentation-photo").forEach(photo => {
+                photo.addEventListener("click", () => openDocumentationLightbox(photo.dataset.docId));
+            });
+
+            documentationLightbox.querySelector(".documentation-lightbox-close").addEventListener("click", closeDocumentationLightbox);
+            documentationLightbox.addEventListener("click", event => {
+                if (event.target === documentationLightbox) closeDocumentationLightbox();
+            });
+
+            document.addEventListener("keydown", event => {
+                if (event.key === "Escape" && documentationLightbox.classList.contains("is-open")) {
+                    closeDocumentationLightbox();
+                }
+            });
+
+            updateStack(0);
+            startPageIntro();
+        </script>
+    </body>
+</html>
